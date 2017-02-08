@@ -46,11 +46,6 @@ var linechart = d3.select("#area1")
                 .attr("width", wLine)
                 .attr("height", hLine);
 
-// Create svg for district highlighted
-var region = d3.select("#area0")
-                .append("svg")
-                .attr("width", 50)
-                .attr("height", 30);
 
 var dataset; // This is a Global variable
 
@@ -134,7 +129,7 @@ d3.csv("data/div9.csv", function(data) {
         .attr("y", yPosition)
         .attr("text-anchor", "start")
         .attr("font-family", "ff-nuvo-sc-web-pro-1,ff-nuvo-sc-web-pro-2, sans-serif") 
-        .attr("font-size", "15px")
+        .attr("font-size", "20px")
         .text( activeDistrict); 
 
         d3.selectAll("rect")
