@@ -1,0 +1,89 @@
+//Store width, height and margin in variables
+var wBar = 600;
+var hBar = 500;
+var marginBar = {top: 40, right: 10, bottom: 20, left: 50};
+
+// Scale the width and height
+var xScaleBar = d3.scale.linear()
+                .range([0,wBar - marginBar.right - marginBar.left]);
+
+var yScaleBar = d3.scale.ordinal()
+                .rangeRoundBands([marginBar.top, hBar - marginBar.bottom],0.2);
+
+// Creat Axes i.e. xAxis and yAxis
+var xAxisBar = d3.svg.axis()
+              .scale(xScaleBar)
+              .orient("top");
+
+var yAxisBar = d3.svg.axis()
+              .scale(yScaleBar)
+              .orient("left");
+
+var barchcart = d3.select("#area2")
+				.append("svg")
+				.attr("width", wBar+ marginBar.right + marginBar.left)
+				.attr("height", hBar + marginBar.top + marginBar.bottom);
+
+d3.csv("data/div9.csv", function(data) {
+
+	data.sort(function(a, b) {
+		return d3.descending(+a[avg] || 0, +b[avg] || 0);
+	}) // end of data.sort
+
+	// Settingn domains for barchart scale
+
+	xScaleBar.domain( [ 0, d3.max(data, function(d) {
+		return +d[avg] || 0;
+	})]);
+
+	yScaleBar.domain(data.map( function(d) {
+		return d.district;
+	} ));
+
+	// Binding data to rects
+	var rects = barchart.selectAll("rect")
+				.data(data)
+				.enter()
+				.append("rect");
+
+	// Assigning attributes to rects to render
+	rects.attr("x", marginBar.left)
+			.attr("y", function(d) {
+				return yScaleBar(d.district);
+			})
+			.attr("width", function(d) {
+				if (d[avg] === "NA"){
+					return xScaleBar(0);
+				}
+				else{
+				return xScaleBar(d[avg]);
+			}
+			})
+			.attr("height", yScaleBar.rangeBand())
+			.attr("class", "barBase")
+			.append("title")
+			.text(function(d) {
+				return d.district + "'s average failure rate over the last 5 years was " + d[avg];
+			});
+			
+		
+		//add data labels	
+		barchart.selectAll("text")
+			.data(data)
+			.enter()
+			.append("text")
+			.text(function(d) {
+				return d[avg];
+			})
+			.attr("x", function(d) {
+				if (d[avg] === "NA"){ return marginBar.left; }
+				else{ return xScaleBar(d[avg]) + marginBar.left + 3; }
+			})
+			.attr("y", function(d) {
+				return yScaleBar(d.district) + yScaleBar.rangeBand() - 3;
+			})
+			.attr("class", "barlabel")
+			.attr("text-anchor", "start")
+			.style("fill", "#000");
+
+});// end of d3.csv(
