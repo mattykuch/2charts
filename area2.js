@@ -59,7 +59,7 @@ d3.csv("data/div9.csv", function(data) {
       .call(yAxis)
       .append("text")
 	  .attr("x", margin.left - 65)
-       .attr("y", margin.top - 25)
+       .attr("y", margin.top - 5)
 	  .style("font-size", "14")
 	  .style("text-anchor", "start")
 	  .text("Average failure rate (in %) over the last 5 years by district");

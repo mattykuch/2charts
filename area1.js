@@ -124,6 +124,19 @@ d3.csv("data/div9.csv", function(data) {
 
         activeDistrict = d.district;
 
+        // Setting positio for the district label
+        var xPosition = wLine/2 + 35;
+        var yPosition = marginLine.top - 10;
+
+        linechart.append("text")
+        .attr("id", "hoverLabel")
+        .attr("x", xPosition)
+        .attr("y", yPosition)
+        .attr("text-anchor", "start")
+        .attr("font-family", "ff-nuvo-sc-web-pro-1,ff-nuvo-sc-web-pro-2, sans-serif") 
+        .attr("font-size", "15px")
+        .text( activeDistrict); 
+
         d3.selectAll("rect")
         .classed("barLight", function(d) {
           if ( d.district == activeDistrict) return true;
